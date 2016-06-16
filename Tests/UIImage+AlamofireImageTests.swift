@@ -32,8 +32,8 @@ extension UIImage {
 
         guard let rendered1 = image1, let rendered2 = image2 else { return false }
 
-        let pixelData1 = CGDataProviderCopyData(CGImageGetDataProvider(rendered1.CGImage))
-        let pixelData2 = CGDataProviderCopyData(CGImageGetDataProvider(rendered2.CGImage))
+        let pixelData1 = CGDataProviderCopyData(CGImageGetDataProvider(rendered1.CGImage!)!)
+        let pixelData2 = CGDataProviderCopyData(CGImageGetDataProvider(rendered2.CGImage!)!)
 
         guard let validPixelData1 = pixelData1, let validPixelData2 = pixelData2 else { return false }
 
@@ -61,7 +61,7 @@ extension UIImage {
         guard images == nil else { return nil }
 
         // Do not attempt to render if not backed by a CGImage
-        guard let imageRef = CGImageCreateCopy(CGImage) else { return nil }
+        guard let imageRef = CGImageCreateCopy(CGImage!) else { return nil }
 
         let width = CGImageGetWidth(imageRef)
         let height = CGImageGetHeight(imageRef)
@@ -87,10 +87,10 @@ extension UIImage {
 
         // Render the image
         let context = CGBitmapContextCreate(nil, width, height, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo.rawValue)
-        CGContextDrawImage(context, CGRectMake(0.0, 0.0, CGFloat(width), CGFloat(height)), imageRef)
+        CGContextDrawImage(context!, CGRectMake(0.0, 0.0, CGFloat(width), CGFloat(height)), imageRef)
 
         // Make sure the inflation was successful
-        guard let renderedImageRef = CGBitmapContextCreateImage(context) else { return nil }
+        guard let renderedImageRef = CGBitmapContextCreateImage(context!) else { return nil }
 
         let renderedImage = UIImage(CGImage: renderedImageRef, scale: scale, orientation: imageOrientation)
 
